@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Farm Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div id="login-overlay">
+        <div class="login-card">
+            <h2>🚜 My Farm</h2>
+            <p>Enter Family Access Code</p>
+            <div class="input-group">
+                <input type="password" id="passkey" placeholder="Surname@2026">
+                <button onclick="checkLogin()">Unlock Dashboard</button>
+            </div>
+            <p id="error-msg" style="color: #e53935; font-size: 14px; margin-top: 10px;"></p>
+        </div>
+    </div>
+
+    <div id="main-dashboard">
+        
+        <header class="no-print">
+            <strong>🌾 Miheso Agribusiness</strong>
+            <div>
+                <button onclick="toggleTheme()" id="theme-btn">🌙 Dark Mode</button>
+                <button onclick="factoryReset()" style="background:#444; font-size: 10px;">Reset App</button>
+            </div>
+        </header>
+
+        <nav class="nav-menu no-print">
+            <div class="nav-item active" onclick="showSection('home', event)">🏠 Home</div>
+            <div class="nav-item" onclick="showSection('dairy', event)">🐄 Dairy & Milk</div>
+            <div class="nav-item" onclick="showSection('crops', event)">🌽 Maize & Beans</div>
+            <div class="nav-item" onclick="showSection('vet', event)">🩺 Vet & Breeding</div>
+            <div class="nav-item" onclick="showSection('reports', event)">📄 Reports</div>
+        </nav>
+
+        <main class="container">
+
+            <div id="home" class="content-section">
+                <div id="breeding-alert-box" class="card" style="display:none; border-left: 5px solid #fb8c00; background: #fff3e0; color: #333;">
+                    <h3 style="margin-top:0">⚠️ Breeding Alerts</h3>
+                    <ul id="alert-list"></ul>
+                </div>
+
+                <div class="card">
+                    <h2>Welcome Back 👋</h2>
+                    <p id="elevate-tip" style="font-style: italic; color: var(--primary-green);">Keep recording your harvest to see trends and maximize profit.</p>
+                </div>
+
+                <div class="grid-container">
+                    <div class="card weekly-card">
+                        <p class="stat-label">Production (Total)</p>
+                        <h2 id="home-weekly-liters">0 L</h2>
+                        <p class="stat-label">Estimated Revenue</p>
+                        <h2 id="home-weekly-earnings">0 Ksh</h2>
+                    </div>
+
+                    <div class="card">
+                        <h3>🌽 Crop Stock</h3>
+                        <p class="stat-label">Maize</p>
+                        <strong class="orange-text" id="home-maize">0 Bags</strong>
+                        <p class="stat-label">Beans</p>
+                        <strong class="green-text" id="home-beans">0 Bags</strong>
+                    </div>
+
+                    <div class="card">
+                        <h3>🩺 Health & Visits</h3>
+                        <p class="stat-label">Due Soon</p>
+                        <strong class="orange-text" id="home-alerts">0</strong>
+                        <p class="stat-label">Total Vet Visits</p>
+                        <strong class="green-text" id="home-vet-visits">0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div id="dairy" class="content-section hidden">
+                <div class="card">
+                    <h3>🥛 Daily Milk Record</h3>
+                    <div class="input-group">
+                        <input type="date" id="milk-date">
+                        <select id="milk-session">
+                            <option value="Morning">Morning</option>
+                            <option value="Mid-day">Mid-day</option>
+                            <option value="Evening">Evening</option>
+                        </select>
+                        <input type="number" id="milk-liters" placeholder="Liters Produced">
+                        <input type="number" id="milk-price" placeholder="Price per Liter" value="60">
+                        <button onclick="saveMilkRecord()">Save Entry</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Production Log</h3>
+                    <table width="100%">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Session</th>
+                                <th>Liters</th>
+                                <th>Ksh</th>
+                                <th class="no-print">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="milk-data-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="crops" class="content-section hidden">
+                <div class="card">
+                    <h3>🌽 Crop Management</h3>
+                    <div class="input-group">
+                        <select id="crop-type">
+                            <option value="Maize">Maize</option>
+                            <option value="Beans">Beans</option>
+                        </select>
+                        <input type="number" id="crop-bags" placeholder="Number of Bags">
+                        <select id="crop-action">
+                            <option value="Stored">Add to Store</option>
+                            <option value="Sold">Mark as Sold</option>
+                        </select>
+                        <button onclick="saveCropRecord()">Record Action</button>
+                    </div>
+                </div>
+                <div class="grid-container">
+                    <div class="card">
+                        <h4>Maize Summary</h4>
+                        <p>In Store: <strong id="maize-stored">0</strong></p>
+                        <p>Total Sold: <strong id="maize-sold">0</strong></p>
+                    </div>
+                    <div class="card">
+                        <h4>Beans Summary</h4>
+                        <p>In Store: <strong id="beans-stored">0</strong></p>
+                        <p>Total Sold: <strong id="beans-sold">0</strong></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Inventory History</h3>
+                    <table width="100%">
+                        <thead>
+                            <tr><th>Date</th><th>Type</th><th>Action</th><th>Bags</th><th>Action</th></tr>
+                        </thead>
+                        <tbody id="crop-history-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vet" class="content-section hidden">
+                <div class="card">
+                    <h3>🍼 Breeding (AI) Logger</h3>
+                    <div class="input-group">
+                        <input type="text" id="cow-name" placeholder="Cow Name/ID">
+                        <input type="date" id="ai-date">
+                        <input type="text" id="bull-breed" placeholder="Bull Breed/Straw ID">
+                        <button onclick="saveBreedingRecord()">Log Breeding</button>
+                    </div>
+                </div>
+                <div id="breeding-display"></div>
+
+                <div class="card">
+                    <h3>🩺 Vet Visits & Feeds</h3>
+                    <div class="input-group">
+                        <input type="date" id="vet-date">
+                        <input type="text" id="vet-reason" placeholder="Reason (Vaccination, Sickness, etc.)">
+                        <input type="number" id="vet-cost" placeholder="Cost (Ksh)">
+                        <button onclick="saveVetVisit()">Save Visit</button>
+                    </div>
+                    <ul id="vet-list" style="list-style:none; padding:0; margin-top:20px;"></ul>
+                    <hr>
+                    <div class="input-group">
+                        <input type="text" id="feed-name" placeholder="Feed Type">
+                        <input type="text" id="feed-target" placeholder="Target Group">
+                        <button onclick="saveFeedRecord()">Save Feed Record</button>
+                    </div>
+                    <ul id="feed-list" style="list-style:none; padding:0; margin-top:20px;"></ul>
+                </div>
+            </div>
+
+            <div id="reports" class="content-section hidden">
+                <div id="printable-area">
+                    <div class="card">
+                        <h2>Miheso Farm Progress Report</h2>
+                        <canvas id="milkChart" width="400" height="200"></canvas>
+                        <div id="report-content"></div>
+                    </div>
+                    
+                    <div class="card no-print">
+                        <h3>💾 Data Actions</h3>
+                        <p>Manage and export your records.</p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button onclick="window.print()">🖨️ Print Report</button>
+                            <button onclick="shareToWhatsApp()" style="background:#25D366">WhatsApp Share</button>
+                            <button onclick="downloadBackup()" style="background:#007bff">Download Full Backup (.json)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

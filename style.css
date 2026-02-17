@@ -1,0 +1,141 @@
+:root {
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-color: #333;
+    --primary-green: #008000;
+    --accent-color: #fb8c00;
+    --border-color: #ddd;
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-color: #e0e0e0;
+    --border-color: #333;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    transition: 0.3s ease;
+}
+
+#login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-green);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.login-card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+#main-dashboard { display: none; }
+
+header {
+    background: var(--card-bg);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 500;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 10px;
+    padding: 1rem;
+    overflow-x: auto;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nav-item {
+    padding: 8px 15px;
+    background: var(--bg-color);
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+    border: 1px solid var(--border-color);
+    transition: 0.2s ease;
+}
+
+.nav-item.active {
+    background: var(--primary-green);
+    color: white;
+    font-weight: 600;
+}
+
+.container { padding: 20px; max-width: 1000px; margin: auto; }
+
+.card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.weekly-card {
+    background: linear-gradient(135deg, var(--primary-green), #1b5e20);
+    color: white;
+    border: none;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.input-group { display: flex; flex-direction: column; gap: 10px; }
+
+input, select, button {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+}
+
+button {
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-delete { background: #e53935; padding: 5px 10px; font-size: 11px; width: auto; }
+
+.green-text { color: var(--primary-green); font-size: 1.5rem; font-weight: bold; }
+.orange-text { color: var(--accent-color); font-size: 1.5rem; font-weight: bold; }
+.stat-label { font-size: 0.9rem; opacity: 0.9; margin: 0; }
+.hidden { display: none; }
+
+canvas { max-width: 100%; margin: 20px 0; border-radius: 8px; background: white; }
+
+@media print {
+    .no-print { display: none !important; }
+    #main-dashboard { display: block !important; }
+    .card { box-shadow: none; border: 1px solid #ccc; }
+}
