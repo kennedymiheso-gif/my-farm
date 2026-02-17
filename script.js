@@ -65,7 +65,7 @@ function downloadBackup() {
     const link = document.createElement("a");
     const date = new Date().toISOString().split('T')[0];
     link.href = url;
-    link.download = `Miheso_Farm_Backup_${date}.json`;
+    link.download = `My_Farm_Backup_${date}.json`;
     
     document.body.appendChild(link);
     link.click();
@@ -253,4 +253,5 @@ function shareToWhatsApp() {
 
 function loadAllData() {
     displayMilk(); displayBreeding(); displayCrops(); displayVetVisits(); displayFeeds(); checkBreedingAlerts(); updateHomeDashboard();
+
 }
